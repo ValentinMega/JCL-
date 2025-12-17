@@ -1,0 +1,44 @@
+//***********************************************************
+//*JCL que ordena por primeras tres posiciones, y suma las  *
+//*siguientes 7 posiciones del archivo                      *
+//***********************************************************
+//JOB00301 JOB REGION=0M,CLASS=A,MSGCLASS=A,NOTIFY=&SYSUID
+//*        ,TYPRUN=SCAN
+//*----------------------------------------------------------
+//PASO01   EXEC PGM=SORT
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=* 
+//*
+//SORTIN   DD DSN=ARCHI.ENTRADA,DISP=SHR
+//SORTOUT  DD DSN=ARCHI.SALIDA,DISP=(NEW,CATLG,DELETE),
+//         DCB=(RECFM=FB,LRECL=10,BLKSIZE=0,DSORG=PS),
+//         SPACE=(TRK,(1,1),RLSE) 
+//*
+//SYSIN    DD *
+      SORT FIELDS=(1,3,CH,A) 
+      SUM FIELDS=(4,7),FORMAT=ZD   
+      END
+/*
+//
+//***********************************************************
+//*                     COMENTARIOS                         *
+//***********************************************************
+//*SORT FIELDS: Comando para ordenar por primeras tres      *
+//*posiciones                                               *
+//*                                                         *
+//*SUM FIELDS: Comando para sumar las siguientes 7          *
+//*posiciones                                               *
+//*                                                         *
+//*ZD Decimal con signo                                     *
+//*                                                         *
+//*PS: archivo secuencial                                   *
+//*                                                         *
+//*SORT FIELDS=(1,3,CH,A): (desde la posicion 1;            *
+//*tres elementos; caracteres, ordenados de manera          *
+//*ascendente)                                              *
+//*                                                         *
+//*FORMAT=ZD:Decimal con signo                              *
+//*                                                         *
+//*SYSOUT:Describe las características de un fichero de     * 
+//*salida cuya trascripción va a efectuar el JES            *
+//***********************************************************
